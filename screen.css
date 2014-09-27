@@ -1,0 +1,8 @@
+#container {
+	margin: 0 auto;
+	padding: 2em;
+	text-align: left;
+	max-width: 80%;
+}
+
+p, li { line-height: 140%; }

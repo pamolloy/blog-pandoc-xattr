@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+#   generate.bash - Generate HTML from Markdown
+#
+
+YAML=$(mktemp)
+echo -e "---\npost:" > $YAML
+for FILE in $(ls -t "$1"/*.md); do
+    echo -e "  - file:\t$(basename $FILE .md).html" >> $YAML
+    PANDOC="pandoc --standalone --data-dir=$PWD --to=html"
+    IFS=$'\n'                               # Use new lines to split
+    OUTPUT=( $(getfattr -d $FILE) )         # Array with each line as an element
+    for LINE in ${OUTPUT[@]}; do            # Loop through `getfattr` output
+        if [ ${LINE:0:4} = "user" ]; then   # Lines starting with `user`
+            IFS="="
+            read -a ARRAY <<< "${LINE:5}"   # Split on `=`
+            KEY="${ARRAY[0]}"
+            VALUE="${ARRAY[1]}"
+            if [ $KEY = "birth" ]; then
+                PANDOC+=" --variable "
+                echo "date --date="$VALUE" +"%A""
+                DATE=$(date --date="$VALUE" +"%A")
+                echo $DATE
+                PANDOC+="$KEY=$DATE"
+            else 
+                PANDOC+=" --variable "      # Add a Pandoc template variable
+                PANDOC+=${LINE:5}           # e.g. `birth="1365307200"`
+            fi
+            VALUE="${VALUE:1:-1}"           # YAML can't parse nested quotes
+            echo -e "    $KEY:\t$VALUE" >> $YAML
+        fi
+    done
+    echo $PANDOC
+    eval "$PANDOC -c ../screen.css -o html/$(basename $FILE .md).html $FILE"
+done
+echo -e "---\n" >> $YAML
+cat $YAML
+pandoc --standalone --data-dir=$PWD --template=index.html \
+    -c ../screen.css -o "$2"/index.html $YAML
+rm $YAML
