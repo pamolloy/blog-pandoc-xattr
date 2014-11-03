@@ -18,10 +18,9 @@ for FILE in $(ls -t "$1"/*.md); do
             VALUE="${ARRAY[1]//\"}"
             if [ $KEY = "birth" ]; then
                 PANDOC+=" --variable "
-                echo "date --date="$VALUE" +"%A""
-                DATE=$(date --date="$VALUE" +"%A")
-                echo $DATE
-                PANDOC+="$KEY=$DATE"
+                VALUE=$(date -d "$VALUE" +"%A, %B %e, %Y")
+                echo "$DATE"
+                PANDOC+="$KEY=\"$VALUE\""
             elif [ $KEY = "pandoc" ]; then
                 PANDOC+=" $VALUE "          # Use pandoc flags e.g. --mathjax
             else 
