@@ -15,7 +15,7 @@ for FILE in $(ls -t "$1"/*.md); do
             IFS="="
             read -a ARRAY <<< "${LINE:5}"   # Split on `=`
             KEY="${ARRAY[0]}"
-            VALUE="${ARRAY[1]}"
+            VALUE="${ARRAY[1]//\"}"
             if [ $KEY = "birth" ]; then
                 PANDOC+=" --variable "
                 echo "date --date="$VALUE" +"%A""
@@ -28,7 +28,6 @@ for FILE in $(ls -t "$1"/*.md); do
                 PANDOC+=" --variable "      # Add a Pandoc template variable
                 PANDOC+=${LINE:5}           # e.g. `birth="1365307200"`
             fi
-            VALUE="${VALUE:1:-1}"           # YAML can't parse nested quotes
             echo -e "    $KEY:\t$VALUE" >> $YAML
         fi
     done
