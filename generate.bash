@@ -22,6 +22,8 @@ for FILE in $(ls -t "$1"/*.md); do
                 DATE=$(date --date="$VALUE" +"%A")
                 echo $DATE
                 PANDOC+="$KEY=$DATE"
+            elif [ $KEY = "pandoc" ]; then
+                PANDOC+=" $VALUE "          # Use pandoc flags e.g. --mathjax
             else 
                 PANDOC+=" --variable "      # Add a Pandoc template variable
                 PANDOC+=${LINE:5}           # e.g. `birth="1365307200"`
