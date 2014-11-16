@@ -26,7 +26,7 @@ for FILE in "$1"/*.md; do
     sed -i '/layout: /d' $FILE      # Delete YAML `layout` line
     sed -i 's#^{% highlight.*#```#g' $FILE
     sed -i 's#^{% endhighlight.*#```#g' $FILE
-    NEW="posts/${FN:11}"            # Remove date from filename
+    NEW="$2/${FN:11}"               # Remove date from filename
     setfattr -n user.birth -v "$(date --date=$DATE)" $FILE
     setfattr -n user.title -v "$TITLE" $FILE
     rsync -ptgo -A -X $FILE $NEW    # Copy and preserve file attributes
