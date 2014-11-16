@@ -20,20 +20,22 @@ $for(css)$
 $endfor$
 </head>
 <body>
+<div id="container">
     <table>
         <thead>
             <tr>
-                <th>Title<th>
-                <th>Creation date<td>
+                <th align="left">Title</th>
+                <th align="right">Creation date</th>
             </tr>
         </thead>
         <tbody>
             $for(post)$<tr>
-                <td><a href="$post.file$">$post.title$</a></td>
-                <td><p>$post.birth$</p></td>
+                <td align="left"><a href="$post.file$">$post.title$</a></td>
+                <td align="right"><p>$post.birth$</p></td>
             </tr>
             $endfor$
         </tbody>
     </table>
+</div>
 </body>
 </html>
