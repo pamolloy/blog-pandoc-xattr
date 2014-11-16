@@ -17,7 +17,7 @@ for FILE in "$1"/*.md; do
     MTIME=$(date -d "$STAT")        # Convert to format understood by `touch -d`
     DATE="${FN:0:10}"               # Store creation date from filename
     sed -i '/{: id="genutiv"}/d' $FILE  # Delete lines with `{: id="genutiv"}`
-    sed -i '/^---$/d' $FILE          # Delete `---` markdown footnote and YAML
+    sed -i '/^---$/d' $FILE         # Delete `---` markdown footnote and YAML
     LINE=$(grep title: $FILE)       # Convert `title` to markdown header
     IFS=":" read -a ARRAY <<< "$LINE"           # Split on `:`
     TITLE=$(echo "${ARRAY[1]}" | sed 's/^ *//') # Remove leading spaces
