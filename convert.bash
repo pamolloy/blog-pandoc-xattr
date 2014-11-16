@@ -1,6 +1,10 @@
 #!/bin/bash
 #
+# NAME
 #   convert.bash - Convert posts from Jeykll to new format
+#
+# SYNOPSIS
+#   convert.bash SOURCE... DIRECTORY
 #
 # TODO
 #   - There may be other YAML lines

@@ -1,6 +1,10 @@
 #!/bin/bash
 #
+# NAME
 #   generate.bash - Generate HTML from Markdown
+#
+# SYNOPSIS
+#   generate.bash SOURCE... DIRECTORY
 #
 
 YAML=$(mktemp)
