@@ -6,6 +6,18 @@ The values of regular and extended file attributes are passed to `pandoc` using 
 
 The Linux kernel stores in-memory representations of inodes within `struct inode`, which are derived by the low-level filesystem from on-disk inodes.[^brouwer] It appears that those representations persist in memory.[^21325] This does not garantuee that extended file attributes are treated the same way, and it may be dependent upon the filesystem implementation. For example, see [ext3/xattr.c](http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/fs/ext3/xattr.c?id=HEAD), [ext4/xattr.c](http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/fs/ext4/xattr.c?id=HEAD), and [reiserfs/xattr.c](http://lxr.free-electrons.com/source/fs/reiserfs/xattr.c).
 
+To set the title and creation date for a post use `setfattr` and then read them using `getfattr`:
+
+``` bash
+$ setfattr -n "user.title" -v "Guessing German Noun Gender" gender.md
+$ setfattr -n "user.date" -v "$(date)" gender.md
+$ getfattr -d gender.md
+# file: gender.md
+user.birth="Tue Aug 16 00:00:00 EDT 2011"
+user.title="Guessing German Noun Gender "
+
+```
+
 Sometimes it is desirable to modify a file without changing the modification date and time. The following BASH function stores the modification date and time before modifying the file and then saves it back to the modified file. Simply add it to a `bashrc` file and call it from the command-line:
 
 ``` bash
