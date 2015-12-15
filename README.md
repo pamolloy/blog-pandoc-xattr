@@ -10,7 +10,7 @@ To set the title and creation date for a post use `setfattr` and then read them 
 
 ``` bash
 $ setfattr -n "user.title" -v "Guessing German Noun Gender" gender.md
-$ setfattr -n "user.date" -v "$(date)" gender.md
+$ setfattr -n "user.birth" -v "$(date)" gender.md
 $ getfattr -d gender.md
 # file: gender.md
 user.birth="Tue Aug 16 00:00:00 EDT 2011"
