@@ -35,7 +35,7 @@ for FILE in $(ls -t "$1"/*.md); do
         fi
     done
     echo $PANDOC
-    eval "$PANDOC -c ../screen.css -o html/$(basename $FILE .md).html $FILE"
+    eval "$PANDOC -c screen.css -o html/$(basename $FILE .md).html $FILE"
 done
 echo -e "---\n" >> $YAML
 cat $YAML
