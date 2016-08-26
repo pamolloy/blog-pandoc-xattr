@@ -27,6 +27,11 @@ for FILE in $(ls -t "$1"/*.md); do
                 PANDOC+="$KEY=\"$VALUE\""
             elif [ $KEY = "pandoc" ]; then
                 PANDOC+=" $VALUE "          # Use pandoc flags e.g. --mathjax
+            elif [ $KEY = "title" ]; then
+                PANDOC+=" --variable "
+                PANDOC+=${LINE:5}
+                PANDOC+=" --variable "
+                PANDOC+="pagetitle${LINE:10}"
             else 
                 PANDOC+=" --variable "      # Add a Pandoc template variable
                 PANDOC+=${LINE:5}           # e.g. `birth="1365307200"`
