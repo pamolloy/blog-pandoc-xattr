@@ -19,19 +19,22 @@ $for(css)$
   <link rel="stylesheet" href="$css$" $if(html5)$$else$type="text/css" $endif$/>
 $endfor$
 </head>
-<body>
+<body id="home">
+<div id="header">
+    <h1>Contents</h1>
+</div>
 <div id="container">
     <table>
         <thead>
             <tr>
                 <th align="left">Title</th>
-                <th align="right">Creation date</th>
+                <th align="left">Creation date</th>
             </tr>
         </thead>
         <tbody>
             $for(post)$<tr>
                 <td align="left"><a href="$post.file$">$post.title$</a></td>
-                <td align="right"><p>$post.birth$</p></td>
+                <td align="left">$post.birth$</td>
             </tr>
             $endfor$
         </tbody>
