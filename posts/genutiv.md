@@ -27,7 +27,6 @@ The _Substantiv (Deutsch)_ category consists of 36,217 pages that each contain a
 
 Unfortunately, the _Substantiv (Deutsch)_ category contains [proper nouns](http://en.wikipedia.org/wiki/Proper_noun), regional and antiquated nouns, and words borrowed from other languages.[^select] To exclude these types of nouns Genutiv takes advantage of preexisting categories to filter out nouns from the list containing the 36,217 pages in _Substantiv (Deutsch)_. Removing the nouns within the following categories results in a list containing 28,991 nouns, which is nearly 20% smaller than the original.[^page]
 
-|---
 | Category | Pages | Parents
 |-|-:|-
 | [Eigenname (Deutsch)](http://de.wiktionary.org/wiki/Kategorie:Eigenname_(Deutsch)) | 288 | Substantiv (Deutsch)
