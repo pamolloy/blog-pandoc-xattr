@@ -39,6 +39,6 @@ for FILE in $(ls -t "$1"/*.md); do
 done
 echo -e "---\n" >> $YAML
 cat $YAML
-pandoc --standalone --data-dir=$PWD --template=index.html \
+pandoc --standalone --data-dir=$PWD --variable pagetitle="Philip Molloy" --template=index.html \
     -c ../screen.css -o "$2"/index.html $YAML
 rm $YAML
