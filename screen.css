@@ -17,7 +17,7 @@ body {
 
 /* general formatting */
 
-a:link { color: #516170; text-decoration: none; }
+a:link { color: #3d678f; text-decoration: none; }
 a:visited { color: #314150; text-decoration: none; }
 a:hover { color: #2a3037; text-decoration: underline; }
 a:active { color: #343b44; text-decoration: underline; }
