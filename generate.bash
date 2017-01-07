@@ -7,6 +7,11 @@
 #   generate.bash SOURCE... DIRECTORY
 #
 
+if ! command -v pandoc >/dev/null 2>&1; then
+    echo "Missing dependency: pandoc"
+    exit 1
+fi
+
 YAML=$(mktemp)
 echo -e "---\npost:" > $YAML
 for FILE in $(ls -t "$1"/*.md); do
