@@ -38,7 +38,7 @@ To get `vim` to preserve extended file attributes when editing a file the follow
 set backupcopy=yes
 ```
 
-To copy a file while preserving the extended file attributes and modification time make sure to use the `--xattrs` and `--times` options with `rsync`.
+When copying a file with `rsync` preserve the extended attributes using `--xattrs` or `-X`. It is also recommended to use archive mode (i.e. `--archive`, `-a`).
 
 [^21325]: [Is the file table in the filesystem or in memory?](http://unix.stackexchange.com/questions/21325)
 [^brouwer]: [The Linux Virtual File System](http://www.win.tue.nl/~aeb/linux/lk/lk-8.html) from notes by Andries Brouwer
