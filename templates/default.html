@@ -16,7 +16,7 @@ $highlighting-css$
   </style>
 $endif$
 $for(css)$
-  <link rel="stylesheet" href="$css$" $if(html5)$$else$type="text/css" $endif$/>
+  <link rel="stylesheet" href="/$css$" $if(html5)$$else$type="text/css" $endif$/>
 $endfor$
 $if(math)$
   $math$
@@ -28,27 +28,32 @@ $endfor$
 <body>
 <div id="container">
 $for(include-before)$
-$include-before$
+    $include-before$
 $endfor$
+<div id="nav" style="text-align: left;">
+    <a href="/">Contents</a>
+    $if(birth)$
+    <span style="float: right;">
+        <p class="birth">$birth$</p>
+    </span>
+    $endif$
+</div>
 $if(title)$
 <div id="$idprefix$header">
-<h1 class="title">$title$</h1>
-$for(author)$
-<h2 class="author">$author$</h2>
-$endfor$
-$if(birth)$
-<h3 class="birth">$birth$</h3>
-$endif$
+    <h1 class="title">$title$</h1>
+    $for(author)$
+    <h2 class="author">$author$</h2>
+    $endfor$
 </div>
 $endif$
 $if(toc)$
 <div id="$idprefix$TOC">
-$toc$
+    $toc$
 </div>
 $endif$
 $body$
 $for(include-after)$
-$include-after$
+    $include-after$
 $endfor$
 </div>
 </body>

@@ -1,25 +1,43 @@
+@font-face {
+    font-family: "Lora";
+    src: url("/Lora-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Cardo";
+    src: url("/Cardo-Regular.ttf") format("truetype");
+}
+
 /* layout */
 body {
-	color: #444;
-	background: #fff;
-	margin: 0;
-	padding: 0;
-	text-align: center;
-	font-family: Georgia, serif;
+    color: #444;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: Lora, serif;
 }
 
 #container {
-	margin: 0 auto;
-	padding: 2em;
-	text-align: left;
-	max-width: 700px;
+    margin: 0 auto;
+    padding: 2em;
+    text-align: left;
+    max-width: 700px;
+}
+
+#nav {
+    text-transform: uppercase;
+}
+
+.birth {
+    margin: 0em;
 }
 
 /* general formatting */
 
-a:link { color: #3d678f; text-decoration: none; }
-a:visited { color: #314150; text-decoration: none; }
-a:hover { color: #2a3037; text-decoration: underline; }
+a:link { color: #476785; text-decoration: none; }
+a:visited { color: #474785; text-decoration: none; }
+a:hover { color: #243442; text-decoration: underline; }
 a:active { color: #343b44; text-decoration: underline; }
 
 p, li { line-height: 150%; text-align: justify; }
@@ -27,66 +45,55 @@ img {
     border: 0;
     margin: 0.5em;
     margin-top: 2em;
-	max-width: 720px;
+    max-width: 720px;
 }
 
 /* header */
 
 h1 {
-	font-family: Bembo, Bergamo Std, Cardo, Georgia, serif;
+    font-family: Cardo, serif;
     font-weight: 400;
-    font-size: 2em;
-    font-style: italic;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
+    font-size: 3em;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
 }
-
-/*#header h1#top {
-	color: #aaaaaa;
-	font-family: Bembo, PT Serif, Georgia, serif;
-	font-size: 1em;
-    font-weight: 400;
-    font-style: none;
-    text-transform: uppercase;
-}*/
 
 #home #header h1 {
     color: #444444;
-	font-family: Bembo, Bergamo Std, Cardo, Georgia, serif;
-    font-size: 3em;
-	font-weight: 400;
-    font-style: italic;
-	text-align: center;
+    font-family: Cardo, serif;
+    font-weight: 400;
+    text-align: center;
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
 
 #home table tr td:first-child {
-	width: 60%;
+    width: 60%;
 }
 
 body#home #header p {
-	margin: 0;
+    margin: 0;
 }
 
 h2, h3, h4 {
-    font-family: Georgia, serif;
+    font-family: Lora, serif;
     font-style: none;
-	font-weight: normal;
+    font-weight: normal;
+    margin-bottom: 1em;
 }
 
 h2 { font-size: 1.5em; margin: 1.5em 0 0 0; }
 h3 { font-size: 1.25em; }
 
 pre, code {
-    font-family: Vera Sans Mono, Andale Mono, Consolas, monospace;
+    font-family: Vera Sans Mono, Andale Mono, Consolas, DejaVu Sans Mono, monospace;
     font-size: 0.9em;
 }
 
 pre {
-	background: #ffffff;
-	padding: 0.5em 0.5em 0.5em 1em;
-	border: 1px #dfdfdf solid;
+    background: #ffffff;
+    padding: 0.5em 0.5em 0.5em 1em;
+    border: 1px #dfdfdf solid;
 }
 
 ul {
@@ -94,23 +101,23 @@ ul {
 }
 
 #footer {
-	clear: both;
-	float: left;
-	margin-top: 2em;
+    clear: both;
+    float: left;
+    margin-top: 2em;
     font-size: 0.75em;
 }
 
 /* blog */
 
 ol#pagelist {
-	margin: 1em 0;
-	padding: 0;
+    margin: 1em 0;
+    padding: 0;
 }
 
 ol#pagelist li {
-	margin: 0;
-	padding: 0;
-	list-style: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .index {
@@ -150,6 +157,7 @@ div.footnotes a {
 /* tables */
 table {
     width: 100%;
+    border-collapse: collapse;
 }
 
 table#genutiv {
@@ -162,14 +170,13 @@ table#genutiv {
 th, td {
     padding-left: 7px;
     padding-right: 7px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     vertical-align: top;
 }
 
 th {
-    font-weight: bold;
-    /*padding-bottom: 10px;*/
+    font-weight: 100;
     border-bottom: 1px solid #aaaaaa;
 }
 
@@ -183,3 +190,8 @@ blockquote {
     font-style: italic;
 }
 
+.caption {
+    color: #aaaaaa;
+    font-size: 0.6em;
+    font-family: Georgia, sans-serif;
+}
