@@ -1,99 +1,74 @@
-#!/bin/bash
-#
-# NAME
-#   generate.bash - Generate HTML from Markdown
-#
-# SYNOPSIS
-#   generate.bash SOURCE... DIR
-#
-
-# TODO(PM): Check command-line arguments
-
-set -x
-set -e
+#!/usr/bin/env bash
 
 if ! command -v pandoc >/dev/null 2>&1; then
-    echo "Missing dependency: pandoc"
-    exit 1
+    echo "ERROR: Missing pandoc"
+    return 1
 fi
 
-parse_xattr () {
-    local FILE="$1"
-    local OUTPUT_DIR="$2"
-    local PANDOC="pandoc --standalone --data-dir=$DATA_DIR --to=html"
-    IFS=$'\n'                               # Use new lines to split
+# Return the value of the given extended attribute key
+function get_xattr {
+    local file="${1}"
+    local key="${2}"
 
-    OUTPUT=( $(getfattr -d $FILE) )         # Array with each line as an element
-    for LINE in ${OUTPUT[@]}; do            # Loop through `getfattr` output
-        if [ ${LINE:0:4} = "user" ]; then   # Lines starting with `user`
-            local IFS="="
-            read -a ARRAY <<< "${LINE:5}"   # Split on `=`
-            KEY="${ARRAY[0]}"
-            VALUE="${ARRAY[1]//\"}"
-            if [ $KEY = "birth" ]; then
-                PANDOC+=" --variable "
-                VALUE=$(date -d "$VALUE" +"%A, %B %e, %Y")
-                PANDOC+="$KEY=\"$VALUE\""
-            elif [ $KEY = "pandoc" ]; then
-                PANDOC+=" $VALUE "          # Use pandoc flags e.g. --mathjax
-            elif [ $KEY = "title" ]; then
-                PANDOC+=" --variable "
-                PANDOC+=${LINE:5}
-                PANDOC+=" --variable "
-                PANDOC+="pagetitle${LINE:10}"
-            else 
-                PANDOC+=" --variable "      # Add a Pandoc template variable
-                PANDOC+=${LINE:5}           # e.g. `birth="1365307200"`
-            fi
-            echo -e "    $KEY:\t$VALUE"
-        fi
-    done
-
-    eval "$PANDOC --template=default.html -c screen.css -o $OUTPUT_DIR/$(basename -s .md $FILE).html $FILE"
+    getfattr --only-values --absolute-names -n "${key}" "${file}"
 }
 
-generate_directory () {
-    local INPUT_DIR="$1"   # Path to directory containing Markdown
-    local OUTPUT_DIR="$2"
-    local PANDOC_INPUT=$(mktemp)
+# Convert a markdown file with extended attributes to HTML
+function xattr_markdown_to_html {
+    local file="${1}"
+    local output="${2}"
+    local timestamp
 
-    mkdir -p "$OUTPUT_DIR/$INPUT_DIR"
+    # TODO(PM): Support arbitrary arguments
+    timestamp=$(get_xattr "${file}" "user.birth")
+    pandoc --standalone \
+           --data-dir="${BASH_SOURCE[0]}" \
+           --to=html \
+           --variable "title=$(get_xattr "${file}" "user.title")" \
+           --variable "pagetitle=$(get_xattr "${file}" "user.title")" \
+           --variable "birth=$(date -d "${timestamp}" "+%B %d, %Y")" \
+           --template="$(dirname "${BASH_SOURCE[0]}")/templates/default.html" \
+           -c screen.css \
+           -o "${output}" \
+           "${file}"
+}
 
-    cd $INPUT_DIR
-    echo -e "---\npost:" > $PANDOC_INPUT
-    for FILE in $(ls -t .); do
-        if [ -d "$FILE" ]; then
-            echo -e "  - file:\t$(basename $FILE)/" >> $PANDOC_INPUT
-            # TODO(PM): Use user.title
-            echo -e "    title:\t$(getfattr -d $FILE | grep -o '".*"')" \
-                 >> $PANDOC_INPUT
-            generate_directory "$FILE" "$OUTPUT_DIR/$INPUT_DIR"
-        elif [[ "$FILE" == *.md ]]; then
-            echo -e "  - file:\t$(basename $FILE .md).html" >> $PANDOC_INPUT
-            parse_xattr "$FILE" "$OUTPUT_DIR/$INPUT_DIR" >> $PANDOC_INPUT
+# Recursively generate HTML pages and create an index page for each directory
+function xattr_markdown_dir_to_html {
+    local input_dir="$1"   # Path to directory containing Markdown
+    local output_dir="$2"
+    local pandoc_input=$(mktemp)
+    local timestamp
+
+    trap "rm ${pandoc_input}" EXIT
+
+    echo -e "---\npost:" > "${pandoc_input}"
+    for file in $(ls -t "${input_dir}"); do
+        echo "Converting ${file}..."
+        if [ -d "${input_dir}/${file}" ]; then
+            echo -e "  - file:\t${file}" >> "${pandoc_input}"
+            echo -e "    title:\t$(get_xattr "${input_dir}/${file}" "user.title")" \
+                 >> $pandoc_input
+            mkdir "$output_dir/$(basename "${file}")"
+            xattr_markdown_dir_to_html "${input_dir}/$file" \
+                "$output_dir/$(basename "${file}")"
+        elif [[ "$file" == *.md ]]; then
+            echo -e "  - file:\t$(basename $file .md).html" >> $pandoc_input
+            echo -e "    title:\t$(get_xattr "${input_dir}/${file}" "user.title")" \
+                 >> $pandoc_input
+            timestamp=$(get_xattr "${input_dir}/${file}" "user.birth")
+            echo -e "    birth: $(date -d "${timestamp}" "+%B %d, %Y")\t" \
+                >> $pandoc_input
+            xattr_markdown_to_html "${input_dir}/$file" \
+                "${output_dir}/$(basename "${file}" .md).html"
         fi
     done
-    echo -e "---\n" >> $PANDOC_INPUT
-    cat $PANDOC_INPUT
+    echo -e "---\n" >> $pandoc_input
+
     pandoc --standalone \
            --data-dir=$DATA_DIR \
            --variable pagetitle="Philip Molloy" \
-           --template=index.html -c ../screen.css \
-           -o "${OUTPUT_DIR}/${INPUT_DIR}/index.html" $PANDOC_INPUT
-    #rm $PANDOC_INPUT
-    cd ..
+           --template=index.html \
+           -c ../screen.css \
+           -o "${output_dir}/index.html" "$pandoc_input"
 }
-
-DATA_DIR=/home/philip/repos/public/blog-pandoc-xattr/
-
-if [[ "$2" = /* ]]; then
-    OUTPUT_DIR="$2"
-else
-    OUTPUT_DIR="$PWD/$2"
-fi
-
-# TODO(PM): Don't create posts directory
-cd "$1"; cd ..
-generate_directory "${1##*/}" "$OUTPUT_DIR"
-
-set +x
